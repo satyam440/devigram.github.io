@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeviGram Academy | Systems-First B.Tech Sandbox & Academic Operating System</title>
+    
+    <!-- Google Fonts: Inter & Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        brand: {
+                            blue: '#1e40af',
+                            sky: '#0284c7',
+                            emerald: '#059669',
+                            amber: '#d97706',
+                            purple: '#6d28d9'
+                        }
+                    },
+                    boxShadow: {
+                        'glass': '0 10px 35px -10px rgba(15, 23, 42, 0.08), 0 1px 3px 0 rgba(15, 23, 42, 0.04)',
+                        'glow-blue': '0 0 40px -5px rgba(2, 132, 199, 0.25)',
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+        }
+
+        /* Glassmorphism panels */
+        .light-glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.05);
+        }
+
+        .dark-glass-panel {
+            background: rgba(15, 23, 42, 0.94);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #f8fafc;
+        }
+
+        .text-gradient-primary {
+            background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #0284c7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-gold {
+            background: linear-gradient(135deg, #b45309 0%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Scroll Reveal Effect */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Background Grid Canvas */
+        #hero-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Dynamic Progress Bar Glow */
+        .progress-bar-glow {
+            box-shadow: 0 0 12px rgba(2, 132, 199, 0.5);
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 7px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-blue selection:text-white font-sans overflow-x-hidden">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-slate-950 text-white border-b border-slate-800 text-center py-2.5 px-4 text-xs md:text-sm font-medium sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-4">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-brand-sky/20 text-sky-300 border border-sky-400/30 text-[11px] font-bold uppercase tracking-wider">
+                Full Turnkey University OS
+            </span>
+            <span class="text-slate-300 inline-flex items-center gap-1.5">
+                <!-- Google Official SVG Logo -->
+                <svg class="w-4 h-4 inline" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                </svg>
+                <span class="font-bold text-white">Official Google Cloud Partner</span> | Guided by Harvard Professors & Global Advisory | Sem 3+ Career Guarantee
+            </span>
+            <a href="#whitepaper" class="underline text-sky-400 hover:text-sky-300 font-semibold text-xs ml-1 flex items-center gap-1 inline-flex">
+                View Whitepaper <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <nav class="sticky top-[41px] z-40 w-full transition-all duration-300 border-b border-slate-200/80 bg-white/90 backdrop-blur-md" id="navbar">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-slate-900 p-[1px] shadow-md flex items-center justify-center text-white font-bold">
+                        <i data-lucide="cpu" class="w-5 h-5 text-sky-400"></i>
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="font-extrabold text-xl tracking-tight text-slate-900 leading-none">DeviGram <span class="font-light text-brand-blue">Academy</span></span>
+                        <span class="text-[10px] text-slate-500 font-mono tracking-widest uppercase mt-1">Private Limited • Surat & Greater Noida</span>
+                    </div>
+                </a>
+                
+                <!-- Navigation Links -->
+                <div class="hidden lg:flex items-center space-x-7">
+                    <a href="#google-cloud-partner" class="text-xs uppercase tracking-wider font-bold text-brand-blue hover:text-brand-sky transition-colors flex items-center gap-1">
+                        <i data-lucide="cloud" class="w-3.5 h-3.5"></i> Google Partner
+                    </a>
+                    <a href="#advisory-council" class="text-xs uppercase tracking-wider font-bold text-slate-600 hover:text-brand-blue transition-colors">Global Advisory</a>
+                    <a href="#four-year-journey" class="text-xs uppercase tracking-wider font-bold text-slate-600 hover:text-brand-blue transition-colors">4-Year Roadmap</a>
+                    <a href="#evaluation-engine" class="text-xs uppercase tracking-wider font-bold text-slate-600 hover:text-brand-blue transition-colors">Output Evaluation</a>
+                    <a href="#simulator" class="text-xs uppercase tracking-wider font-bold text-slate-600 hover:text-brand-blue transition-colors">Sandbox Terminal</a>
+                    <a href="#placements" class="text-xs uppercase tracking-wider font-bold text-slate-600 hover:text-brand-blue transition-colors">2K+ Connects</a>
+                </div>
+
+                <!-- Executive CTA -->
+                <div class="flex items-center gap-3">
+                    <a href="#vc-briefing" class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-slate-900 text-white font-bold text-xs uppercase tracking-wider hover:bg-brand-blue transition-all shadow-md">
+                        VC & Chancellor Briefing
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-16 pb-20 lg:pt-24 lg:pb-32 overflow-hidden bg-slate-50">
+        <!-- Interactive Node Grid Canvas Background -->
+        <canvas id="hero-canvas"></canvas>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+            
+            <div class="text-center max-w-4xl mx-auto mb-16 reveal">
+                
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-bold uppercase tracking-widest mb-6 shadow-sm">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Turnkey University Operating Partner • Day 1 Industry Immersion
+                </div>
+                
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 leading-[1.08]">
+                    We Run Complete Engineering Faculties to Build <span class="text-gradient-primary">Innovators & Top Researchers.</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto font-normal leading-relaxed mb-10">
+                    Collaborating with <span class="font-bold text-slate-900">Harvard Professors, Minerva-inspired Cognitive Frameworks, and Industry Leaders</span>. Students solve real-world problems from <span class="font-bold text-brand-blue">Day 1</span>, transition into live industry teams by <span class="font-bold text-slate-900">Year 2</span>, and secure <span class="font-bold text-emerald-700">Guaranteed Placements from Semester 3</span>.
+                </p>
+
+                <!-- Action CTAs -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                    <a href="#vc-briefing" class="w-full sm:w-auto px-8 py-4 rounded-full bg-brand-blue text-white font-bold text-sm tracking-wider uppercase hover:bg-slate-900 transition-all shadow-lg flex items-center justify-center gap-2">
+                        Schedule Institutional Briefing
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#four-year-journey" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white text-slate-900 font-bold text-sm tracking-wider uppercase hover:bg-slate-100 transition-colors border border-slate-300 flex items-center justify-center gap-2 shadow-sm">
+                        <i data-lucide="compass" class="w-4 h-4 text-brand-blue"></i>
+                        Explore 4-Year Student Roadmap
+                    </a>
+                </div>
+
+                <!-- Animated Counter Stats Matrix -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200/90 shadow-glass text-left">
+                    <div class="border-r border-slate-100 pr-4">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-slate-900 font-mono flex items-center">
+                            <span class="counter" data-target="98">0</span><span class="text-brand-sky">.4%</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Code Synthesis Mastery</div>
+                    </div>
+                    <div class="border-r border-slate-100 pr-4 pl-2">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-brand-blue font-mono flex items-center">
+                            <span class="counter" data-target="100">0</span><span class="text-slate-900 text-2xl font-sans">K RPS</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Concurrency Sandbox</div>
+                    </div>
+                    <div class="border-r border-slate-100 pr-4 pl-2">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-emerald-600 font-mono flex items-center">
+                            <span class="counter" data-target="2000">0</span><span class="text-emerald-500">+</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Industry Connects</div>
+                    </div>
+                    <div class="pl-2">
+                        <div class="text-3xl sm:text-4xl font-extrabold text-purple-600 font-mono flex items-center">
+                            <span class="counter" data-target="10">0</span><span class="text-slate-900 text-2xl font-sans">+ Yrs</span>
+                        </div>
+                        <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Practitioner Faculty</div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Partner Trust Bar -->
+    <section class="py-10 bg-white border-y border-slate-200 relative z-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                
+                <a href="#google-cloud-partner" class="flex items-center gap-3 justify-center md:justify-start group hover:opacity-90 transition-opacity">
+                    <div class="w-10 h-10 rounded-lg bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm group-hover:border-brand-blue">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-900 group-hover:text-brand-blue transition-colors">Official Google Cloud Partner</div>
+                        <div class="text-[11px] text-slate-500">Workspace • Co-sell & Services</div>
+                    </div>
+                </a>
+
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
+                        <i data-lucide="graduation-cap" class="w-5 h-5 text-brand-blue"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-900">Harvard & Global Advisors</div>
+                        <div class="text-[11px] text-slate-500">Cognitive & Research Pedagogy</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
+                        <i data-lucide="badge-check" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-900">Guaranteed Career Pathway</div>
+                        <div class="text-[11px] text-slate-500">Active From Semester 3 Onward</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <div class="w-10 h-10 rounded-lg bg-amber-50 border border-amber-100 flex items-center justify-center shrink-0">
+                        <i data-lucide="building-2" class="w-5 h-5 text-amber-600"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-slate-900">360° Turnkey University OS</div>
+                        <div class="text-[11px] text-slate-500">Zero Upfront Capital Expenditure</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Google Cloud Partner Feature Section -->
+    <section id="google-cloud-partner" class="py-16 bg-slate-50 border-b border-slate-200 relative z-20">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="bg-white rounded-3xl p-8 md:p-12 border border-slate-200/90 shadow-glass reveal">
+                
+                <!-- Section Header -->
+                <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8 border-b border-slate-100 pb-8">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+                            <svg class="w-10 h-10" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-brand-blue border border-blue-200 text-xs font-bold uppercase tracking-wider mb-2">
+                                Official Strategic Strategic Partnership
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">Official Google Cloud Partner</h2>
+                            <p class="text-brand-blue font-bold text-sm sm:text-base mt-1">Empowering Educational Institutions with Google Workspace & Cloud Solutions</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 font-mono text-xs text-slate-600 shrink-0">
+                        <i data-lucide="shield-check" class="w-6 h-6 text-emerald-600 shrink-0"></i>
+                        <div>
+                            <div class="font-bold text-slate-900">Google Workspace • Co-sell & Services</div>
+                            <div class="text-[11px] text-slate-500">Attained on August 24, 2026</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Partnership Paragraph -->
+                <div class="bg-slate-50/70 p-6 md:p-8 rounded-2xl border border-slate-200/80 mb-8">
+                    <p class="text-slate-700 text-sm md:text-base leading-relaxed font-normal">
+                        "Devigram Academy Private Limited is proud to be an official Google Cloud Partner with registered status in Google Workspace • Co-sell and Services (Attained on August 24, 2026). Through this strategic partnership, we empower schools, colleges, and educational institutions with cutting-edge cloud infrastructure, seamless digital classrooms, and advanced collaboration tools. As an authorized provider, we deliver trusted licensing, technical deployment, and professional training solutions designed to accelerate the digital transformation of modern education."
+                    </p>
+                </div>
+
+                <!-- Key Highlights Grid -->
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+                        <h3 class="text-xs font-bold text-slate-900 uppercase tracking-widest">Key Highlights</h3>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-blue transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-brand-blue border border-blue-100 flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Google Workspace • Co-sell and Services</h4>
+                                <p class="text-slate-600 text-xs leading-relaxed">Registered and verified official partner.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-brand-sky transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-sky-50 text-brand-sky border border-sky-100 flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="cloud-lightning" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Google Cloud Ecosystem</h4>
+                                <p class="text-slate-600 text-xs leading-relaxed">Certified expertise in cloud technology and co-sell capabilities.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-emerald-600 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-100 flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Education Focus</h4>
+                                <p class="text-slate-600 text-xs leading-relaxed">Dedicated to helping institutions migrate, deploy, and scale Google Workspace for Education seamlessly.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200 shadow-sm hover:border-amber-600 transition-colors">
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-700 border border-amber-100 flex items-center justify-center shrink-0 mt-0.5">
+                                <i data-lucide="award" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-900 text-sm mb-1">Partner Credentials</h4>
+                                <p class="text-slate-600 text-xs leading-relaxed">Issued on September 17, 2026 (Managed by Surangini Nair, Devigram Academy, Surat, India)</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Global Academic & Industry Advisory Council -->
+    <section id="advisory-council" class="py-24 bg-slate-900 text-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-3 block">Institutional Leadership & Governance</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6">
+                    Backed by Harvard Professors, Industry Leaders & <span class="text-gradient-gold">University VCs.</span>
+                </h2>
+                <p class="text-slate-400 text-base sm:text-lg leading-relaxed">
+                    DeviGram Academy operates with 100% execution backing from university Vice-Chancellors, Presidents, renowned Harvard academic researchers, and Minerva-inspired cognitive scientists.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="dark-glass-panel p-8 rounded-2xl border border-slate-800 reveal">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-sky-400 border border-sky-400/30 flex items-center justify-center mb-6">
+                        <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">Harvard Academic Advisors</h3>
+                    <p class="text-xs text-sky-400 font-semibold mb-3">Cognitive Pedagogy & Problem-Solving</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Incorporate global cognitive retention models, structured debate, and active synthesis to train students in computational thinking and deep-tech problem solving.
+                    </p>
+                </div>
+
+                <div class="dark-glass-panel p-8 rounded-2xl border border-slate-800 reveal reveal-delay-1">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-400/30 flex items-center justify-center mb-6">
+                        <i data-lucide="user-check" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">University VCs & Presidents</h3>
+                    <p class="text-xs text-emerald-400 font-semibold mb-3">100% Institutional Execution Support</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Chancellors and Deans partner with DeviGram to upgrade their entire B.Tech CSE operations—driving NAAC 'A++' ratings, NIRF leaps, and global patent filings.
+                    </p>
+                </div>
+
+                <div class="dark-glass-panel p-8 rounded-2xl border border-slate-800 reveal reveal-delay-2">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-400/30 flex items-center justify-center mb-6">
+                        <i data-lucide="cpu" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">10+ Year Senior Practitioners</h3>
+                    <p class="text-xs text-purple-400 font-semibold mb-3">On-Campus Direct Execution</p>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Staff engineers and principal cloud architects reside on campus to co-teach, evaluate live production code, and co-author international IP patents with students.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- The 4-Year Progressive Student Transformation Journey -->
+    <section id="four-year-journey" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-blue uppercase tracking-widest mb-3 block">Real-World Student Evolution</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                    The 4-Year <span class="text-gradient-primary">Innovation Transformation.</span>
+                </h2>
+                <p class="text-slate-600 text-base sm:text-lg">
+                    From Day 1 industry problem-solving to live industry deployment in Year 2 and patent filings in Year 3.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- Year 1 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 relative reveal flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-blue-100 text-brand-blue font-extrabold text-xs">Year 1</span>
+                            <span class="text-[10px] font-mono text-slate-500 font-bold">Sem 1 & 2</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Computational Baseline & Day 1 Industry Immersion</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                            Students tackle real production code bases from Day 1. Mastering C/C++, POSIX internals, data structures, and memory safety through live stress tests.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 text-[11px] font-bold text-brand-blue flex items-center gap-1">
+                        <i data-lucide="check-circle" class="w-4 h-4 text-brand-blue"></i>
+                        100K RPS Simulation Mastery
+                    </div>
+                </div>
+
+                <!-- Year 2 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-brand-blue/40 shadow-sm relative reveal reveal-delay-1 flex flex-col justify-between">
+                    <div class="absolute -top-3 left-6 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-[10px] font-extrabold uppercase tracking-widest">
+                        Sem 3 Guaranteed Placement Gateway
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-4 mt-2">
+                            <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 font-extrabold text-xs">Year 2</span>
+                            <span class="text-[10px] font-mono text-slate-500 font-bold">Sem 3 & 4</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Embedded Industry Living & Distributed Backend</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                            Students transition to live industry teams. Working directly on enterprise codebases, distributed key-value stores, and cloud infrastructure with guaranteed career placement activation.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 text-[11px] font-bold text-emerald-700 flex items-center gap-1">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+                        Guaranteed Industry Placement Active
+                    </div>
+                </div>
+
+                <!-- Year 3 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 relative reveal reveal-delay-2 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-purple-100 text-purple-800 font-extrabold text-xs">Year 3</span>
+                            <span class="text-[10px] font-mono text-slate-500 font-bold">Sem 5 & 6</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Real-Life Problem Solving & IP / Patent Filings</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                            Cohort teams solve critical deep-tech bottlenecks, file global patents co-authored with faculty, and build Agentic AI guardrails for enterprise partners.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 text-[11px] font-bold text-purple-700 flex items-center gap-1">
+                        <i data-lucide="file-text" class="w-4 h-4 text-purple-600"></i>
+                        Global IP & Patent Co-Authoring
+                    </div>
+                </div>
+
+                <!-- Year 4 -->
+                <div class="bg-slate-50 p-8 rounded-2xl border border-slate-200 relative reveal reveal-delay-3 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-extrabold text-xs">Year 4</span>
+                            <span class="text-[10px] font-mono text-slate-500 font-bold">Sem 7 & 8</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900 mb-2">Production Chaos Hardening & Campus Incubated MVPs</h3>
+                        <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                            Final deployment in production environments. Launching campus-incubated deep tech startups or stepping directly into high-paying Tier-1 Forward Deployed SDE roles.
+                        </p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 text-[11px] font-bold text-amber-700 flex items-center gap-1">
+                        <i data-lucide="rocket" class="w-4 h-4 text-amber-600"></i>
+                        Tier-1 SDE & Founder Clearance
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Project & Output-Based Evaluation Engine -->
+    <section id="evaluation-engine" class="py-24 bg-slate-950 text-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                
+                <div class="reveal">
+                    <span class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-3 block">Evaluation Paradigm Shift</span>
+                    <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6">
+                        No 3-Hour Rote Exams. <br/>
+                        <span class="text-gradient-gold">100% Industry Project Grading.</span>
+                    </h2>
+                    <p class="text-slate-300 text-base leading-relaxed mb-8">
+                        Traditional universities evaluate student intelligence through memorization in 3-hour written exams. At DeviGram Academy, students are judged exclusively on deployed code, patent contributions, latency reduction, and real-world system stability.
+                    </p>
+
+                    <div class="space-y-4 font-mono text-xs">
+                        <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 flex items-start gap-4">
+                            <div class="p-2 rounded-lg bg-red-500/10 text-red-400 border border-red-500/20 shrink-0 font-bold">OLD</div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">Legacy Exam Paper Evaluation</h4>
+                                <p class="text-slate-400">Memory retention of theoretical algorithms on paper. Zero real code execution.</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-slate-900 border border-brand-blue/50 flex items-start gap-4 shadow-lg">
+                            <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shrink-0 font-bold">NEW</div>
+                            <div>
+                                <h4 class="font-bold text-white mb-1">DeviGram Real-World Industry Audit</h4>
+                                <p class="text-slate-400">Evaluated directly by 10+ year industry experts based on production code pull requests, patent filings, and system throughput.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Evaluation Matrix Visual -->
+                <div class="dark-glass-panel p-8 rounded-3xl border border-slate-800 reveal shadow-2xl">
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-4 mb-6">
+                        <span class="text-xs font-mono text-sky-400 font-bold">STUDENT_EVALUATION_SCORECARD_v4.2</span>
+                        <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2.5 py-1 rounded-full font-bold">100% VERIFIED</span>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-300">System Throughput & 100K RPS Load Handling</span>
+                                <span class="font-mono text-sky-400 font-bold">35% Weightage</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-sky-400 h-full w-[35%]"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-300">Year 3 Real-Life Problem IP & Patent Filings</span>
+                                <span class="font-mono text-purple-400 font-bold">25% Weightage</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-purple-500 h-full w-[25%]"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-300">Semester 3+ Embedded Industry Project Performance</span>
+                                <span class="font-mono text-emerald-400 font-bold">25% Weightage</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-emerald-500 h-full w-[25%]"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-xs mb-2">
+                                <span class="text-slate-300">Code Quality & Agentic AI Safety Audits</span>
+                                <span class="font-mono text-amber-400 font-bold">15% Weightage</span>
+                            </div>
+                            <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                                <div class="bg-amber-500 h-full w-[15%]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-slate-800 text-center text-xs text-slate-400 font-mono">
+                        Evaluated directly by Senior Industry Architects & Harvard Academic Panel
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Live Sandbox Simulator Section -->
+    <section id="simulator" class="py-24 bg-slate-950 text-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-3 block">Live Systems Sandbox Interactive</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6">
+                    Experience Active Learning <span class="text-gradient-gold">In Real-Time.</span>
+                </h2>
+                <p class="text-slate-400 text-base sm:text-lg">
+                    Test our simulated production outage environment. Students don't sit in lectures—they debug real high-concurrency systems under live stress.
+                </p>
+            </div>
+
+            <!-- Terminal Interactive Container -->
+            <div class="max-w-4xl mx-auto dark-glass-panel rounded-2xl overflow-hidden shadow-2xl border border-slate-800 reveal">
+                
+                <!-- Terminal Top Bar -->
+                <div class="bg-slate-900 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded-full bg-red-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block"></span>
+                        <span class="w-3 h-3 rounded-full bg-green-500 inline-block"></span>
+                        <span class="ml-3 font-mono text-xs text-slate-400">devigram-sandbox@node-01:~/systems-core</span>
+                    </div>
+                    <div class="flex items-center gap-2 font-mono text-xs text-sky-400">
+                        <span class="w-2 h-2 rounded-full bg-sky-400 animate-ping"></span>
+                        LIVE_CLUSTER_READY
+                    </div>
+                </div>
+
+                <!-- Terminal Body & Metrics Controls -->
+                <div class="p-6 md:p-8 font-mono text-xs">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-slate-500 text-[10px] uppercase">Current Concurrency</div>
+                            <div class="text-2xl font-bold text-sky-400 mt-1" id="sim-rps">12,400 RPS</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-slate-500 text-[10px] uppercase">Queue Algorithm</div>
+                            <div class="text-2xl font-bold text-amber-400 mt-1" id="sim-algo">O(N²) Array</div>
+                        </div>
+                        <div class="p-4 rounded-xl bg-slate-900/90 border border-slate-800">
+                            <div class="text-slate-500 text-[10px] uppercase">System Memory State</div>
+                            <div class="text-2xl font-bold text-red-400 mt-1" id="sim-mem">88% Leak</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Log Box -->
+                    <div class="bg-slate-900 rounded-xl p-4 border border-slate-800 h-44 overflow-y-auto mb-6 text-slate-300 space-y-2 leading-relaxed" id="terminal-logs">
+                        <p class="text-slate-500">[SYSTEM INIT] Active Pedagogy Engine ready. Select a scenario below to trigger stress test...</p>
+                    </div>
+
+                    <!-- Interactive Buttons -->
+                    <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-slate-800">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button onclick="runScenario('stress')" class="px-4 py-2.5 rounded-lg bg-red-600/20 text-red-400 border border-red-500/40 hover:bg-red-600 hover:text-white transition-all font-bold">
+                                Trigger 100K RPS Flash Sale Crash
+                            </button>
+                            <button onclick="runScenario('refactor')" class="px-4 py-2.5 rounded-lg bg-emerald-600/20 text-emerald-400 border border-emerald-500/40 hover:bg-emerald-600 hover:text-white transition-all font-bold">
+                                Refactor Queue to Binary Heap O(N)
+                            </button>
+                        </div>
+                        <button onclick="clearTerminal()" class="text-slate-500 hover:text-slate-300 text-xs underline">
+                            Clear Log
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Empirical Whitepaper Data Section -->
+    <section id="whitepaper" class="py-24 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-blue uppercase tracking-widest mb-3 block">Data-Driven Academic OS</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                    Validated by <span class="text-gradient-primary">Empirical Research.</span>
+                </h2>
+                <p class="text-slate-600 text-base sm:text-lg">
+                    Our empirical research maps cognitive retention across 1,000+ student learning hours—comparing traditional lecture formats against active sandbox execution.
+                </p>
+            </div>
+
+            <!-- Whitepaper Interactive Data Matrix -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-glass reveal">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-blue-50 text-brand-blue text-xs font-bold border border-blue-100">Metric 01</span>
+                        <i data-lucide="activity" class="w-5 h-5 text-brand-blue"></i>
+                    </div>
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">98.4%</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Cognitive Code Synthesis Mastery</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        Students subjected to real-time outage debugging demonstrate 98.4% retention in memory layout, OS internals, and concurrency handling vs. 22% in traditional lecture formats.
+                    </p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-brand-blue h-full w-[98.4%] progress-bar-glow"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-glass reveal reveal-delay-1">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 text-xs font-bold border border-emerald-100">Metric 02</span>
+                        <i data-lucide="zap" class="w-5 h-5 text-emerald-600"></i>
+                    </div>
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">100K RPS</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Production Stress Benchmarks</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        100% of Year 2 students deploy and stress-test custom distributed key-value stores under 100,000 requests/sec synthetic traffic prior to clearing internship gateways.
+                    </p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full w-[100%] progress-bar-glow"></div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-glass reveal reveal-delay-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <span class="px-3 py-1 rounded-full bg-purple-50 text-purple-700 text-xs font-bold border border-purple-100">Metric 03</span>
+                        <i data-lucide="file-text" class="w-5 h-5 text-purple-600"></i>
+                    </div>
+                    <div class="text-4xl font-extrabold text-slate-900 font-mono mb-2">1.8 Patents</div>
+                    <h3 class="text-base font-bold text-slate-900 mb-2">Per Student Team IP Generation</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        Average global patent filings co-authored by student cohorts and university faculty in systems, agentic AI, and computational fairness by Year 4 defense.
+                    </p>
+                    <div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                        <div class="bg-purple-600 h-full w-[85%] progress-bar-glow"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Whitepaper Download Banner -->
+            <div class="dark-glass-panel p-8 md:p-10 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-6">
+                <div>
+                    <span class="text-xs font-mono font-bold text-sky-400 uppercase tracking-widest block mb-1">Official Empirical Publication</span>
+                    <h3 class="text-xl font-bold text-white mb-2">Download Academic Whitepaper v2.4 (2026 Edition)</h3>
+                    <p class="text-slate-300 text-xs max-w-2xl">
+                        Title: <em>"A Systems-First Sandbox Architecture for Modern Technical Education: Replacing Rote Curricula with Active Pedagogy and Industry Integration."</em>
+                    </p>
+                </div>
+                <a href="mailto:corporate@devigram.com?subject=Whitepaper%20Request%20-%20DeviGram%20Academy" class="px-6 py-3 rounded-xl bg-sky-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider hover:bg-white transition-colors shrink-0 flex items-center gap-2 shadow-lg">
+                    <i data-lucide="download" class="w-4 h-4"></i> Request Research Whitepaper
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 10+ Years Industry Trainers & Faculty Section -->
+    <section id="faculty" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-blue uppercase tracking-widest mb-3 block">Instructional Excellence</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                    Classes Led by <span class="text-gradient-primary">10+ Year Industry Practitioners.</span>
+                </h2>
+                <p class="text-slate-600 text-base sm:text-lg">
+                    We do not rely on inexperienced teaching assistants. Every active sandbox session is facilitated on-campus by senior staff engineers, deep-tech architects, and domain specialists.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <!-- Trainer Card 1 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200 shadow-sm relative reveal hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-full bg-slate-900 text-sky-400 font-extrabold flex items-center justify-center text-lg border-2 border-brand-blue">
+                            SDE
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Principal Systems Architects</h3>
+                            <p class="text-xs font-semibold text-brand-blue">12+ Years Industry Experience</p>
+                            <span class="text-[10px] text-slate-500 font-mono">Ex-FAANG / Tier-1 Tech Leads</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-6">
+                        Directs POSIX OS kernel labs, distributed storage engine builds, and memory-safe C/C++ architecture sessions directly in university campus labs.
+                    </p>
+                    <div class="pt-4 border-t border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                        Teaches Year 1 & 2 Systems Core
+                    </div>
+                </div>
+
+                <!-- Trainer Card 2 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200 shadow-sm relative reveal reveal-delay-1 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-full bg-slate-900 text-emerald-400 font-extrabold flex items-center justify-center text-lg border-2 border-emerald-500">
+                            AI
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Agentic AI & LLM Governance Leads</h3>
+                            <p class="text-xs font-semibold text-emerald-700">10+ Years Deep Tech Experience</p>
+                            <span class="text-[10px] text-slate-500 font-mono">AI Research & Safety Practitioners</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-6">
+                        Guides students through autonomous LLM agent execution, prompt security, deterministic guardrails, and fine-tuning high-throughput vector databases.
+                    </p>
+                    <div class="pt-4 border-t border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                        Teaches Year 3 Agentic AI Labs
+                    </div>
+                </div>
+
+                <!-- Trainer Card 3 -->
+                <div class="bg-slate-50 rounded-2xl p-8 border border-slate-200 shadow-sm relative reveal reveal-delay-2 hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-14 h-14 rounded-full bg-slate-900 text-purple-400 font-extrabold flex items-center justify-center text-lg border-2 border-purple-500">
+                            FDE
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900">Forward Deployed Engineers (FDE)</h3>
+                            <p class="text-xs font-semibold text-purple-700">11+ Years Enterprise Experience</p>
+                            <span class="text-[10px] text-slate-500 font-mono">Global Cloud & Systems Specialists</span>
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-6">
+                        Trains students in client-facing technical leadership, live production chaos hardening, global patent documentation, and product deployment.
+                    </p>
+                    <div class="pt-4 border-t border-slate-200/80 text-[11px] font-bold text-slate-700 flex items-center gap-2">
+                        <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-600"></i>
+                        Teaches Year 4 Production Capstones
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 2K+ Industry Connects & 50+ Top Companies Showcase -->
+    <section id="placements" class="py-24 bg-slate-50 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16 reveal">
+                <span class="text-xs font-bold text-brand-blue uppercase tracking-widest mb-3 block">Career Acceleration Network</span>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight mb-6">
+                    2,000+ Industry Connects & <span class="text-gradient-primary">50+ Hiring Partners.</span>
+                </h2>
+                <p class="text-slate-600 text-base sm:text-lg">
+                    Students are trained specifically for high-paying roles in top product companies, deep-tech AI startups, cloud infrastructure providers, and Forward Deployed Engineering (FDE) teams.
+                </p>
+            </div>
+
+            <!-- Dynamic Interactive Filter Tabs for 50+ Companies Matrix -->
+            <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-glass reveal">
+                
+                <div class="flex flex-wrap items-center justify-center gap-2 mb-8 border-b border-slate-100 pb-6">
+                    <button onclick="filterDomain('all')" class="domain-tab px-4 py-2 rounded-full bg-slate-900 text-white font-bold text-xs uppercase tracking-wider transition-all">All Domains</button>
+                    <button onclick="filterDomain('ai')" class="domain-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold text-xs uppercase tracking-wider transition-all">Agentic AI & Gen AI</button>
+                    <button onclick="filterDomain('cloud')" class="domain-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold text-xs uppercase tracking-wider transition-all">Cloud & Distributed Systems</button>
+                    <button onclick="filterDomain('fde')" class="domain-tab px-4 py-2 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold text-xs uppercase tracking-wider transition-all">Forward Deployed Eng (FDE)</button>
+                </div>
+
+                <!-- Companies Grid with Logos and Names -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4" id="companies-grid">
+                    
+                    <!-- Google Cloud Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-8 h-8" viewBox="0 0 24 24">
+                                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Google Cloud</div>
+                        <div class="text-[10px] text-brand-blue font-mono font-bold mt-0.5">Registered Official Partner</div>
+                    </div>
+
+                    <!-- OpenAI Card -->
+                    <div class="company-card domain-ai p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M22.2819 9.8211a5.9847 5.9847 0 0 0-.5157-4.9108 6.0462 6.0462 0 0 0-6.5098-2.9A6.0651 6.0651 0 0 0 4.9807 4.1818a5.9847 5.9847 0 0 0-3.9977 2.9 6.0462 6.0462 0 0 0 .7427 7.0966 5.98 5.98 0 0 0 .511 4.9107 6.051 6.051 0 0 0 6.5146 2.9001A5.9847 5.9847 0 0 0 13.2599 24a6.0557 6.0557 0 0 0 5.7718-4.2058 5.9894 5.9894 0 0 0 3.9977-2.9001 6.0557 6.0557 0 0 0-.7475-7.0729zm-9.022 12.6081a4.4755 4.4755 0 0 1-2.8764-1.0408l.1419-.0804 4.7783-2.7582a.7948.7948 0 0 0 .3927-.6813v-6.7369l2.02 1.1686a.071.071 0 0 1 .038.052v5.5826a4.504 4.504 0 0 1-4.4945 4.4944zm-9.6607-4.1254a4.4708 4.4708 0 0 1-.535-3.0137l.142.0852 4.783 2.7582a.7948.7948 0 0 0 .7854 0l5.833-3.3686v2.3324a.0804.0804 0 0 1-.0332.0615L9.74 19.9502a4.4992 4.4992 0 0 1-6.1408-1.6464zM2.3408 8.6156a4.466 4.466 0 0 1 2.3416-1.9729v5.6726a.7948.7948 0 0 0 .3928.6813l5.833 3.3686-2.02 1.1686a.0758.0758 0 0 1-.071 0l-4.8303-2.7866A4.4992 4.4992 0 0 1 2.3408 8.6156zm16.0963 3.8558l-5.833-3.3686 2.0199-1.1686a.0758.0758 0 0 1 .071 0l4.8303 2.7866a4.4992 4.4992 0 0 1-.6813 8.1052v-5.6726a.7948.7948 0 0 0-.3928-.6813zm2.0104-3.0231l-.1419-.0852-4.7735-2.7582a.7948.7948 0 0 0-.7854 0l-5.833 3.3686V7.6411a.0804.0804 0 0 1 .0332-.0615l4.8303-2.7866a4.4992 4.4992 0 0 1 6.6758 4.6608zm-12.6418-4.22a4.4755 4.4755 0 0 1 2.8764 1.0408l-.1419.0804-4.7783 2.7582a.7948.7948 0 0 0-.3927.6813v6.7369l-2.02-1.1686a.071.071 0 0 1-.038-.052V9.3366a4.504 4.504 0 0 1 4.4945-4.4944zm.7008 5.5353l2.8315-1.6338 2.8316 1.6338v3.2676l-2.8316 1.6338-2.8315-1.6338z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">OpenAI</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Agentic AI Systems</div>
+                    </div>
+
+                    <!-- Microsoft Azure Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-7 h-7" viewBox="0 0 23 23">
+                                <path fill="#f35325" d="M1 1h10v10H1z"/>
+                                <path fill="#81bc06" d="M12 1h10v10H12z"/>
+                                <path fill="#05a6f0" d="M1 12h10v10H1z"/>
+                                <path fill="#ffba08" d="M12 12h10v10H12z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Microsoft Azure</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Cloud Infra</div>
+                    </div>
+
+                    <!-- AWS Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-8 h-8 text-amber-500" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.75 11.23c-.15 0-.3-.02-.45-.06-.88-.23-1.32-1.02-1.09-1.9.18-.7.83-1.17 1.54-1.17h1.05v-.31c0-1.07-.63-1.61-1.88-1.61-.83 0-1.6.25-2.29.74-.24.17-.57.14-.77-.07l-.76-.8c-.18-.19-.18-.49.02-.68 1.03-.94 2.37-1.42 3.92-1.42 2.71 0 4.19 1.34 4.19 3.8v6.18c0 .35.28.63.63.63h.14c.28 0 .5.22.5.5v.71c0 .28-.22.5-.5.5h-.64c-1.1 0-1.81-.5-2.07-1.46-.72 1.03-1.81 1.54-3.1 1.54zm.84-2.14c.59 0 1.13-.24 1.5-.66v-1.2h-.92c-.37 0-.67.26-.74.62-.05.27.08.54.32.68.17.09.37.14.57.14zM11.66 14.5c-.32 0-.61-.17-.76-.45l-2.91-5.32-2.91 5.32c-.15.28-.44.45-.76.45H3.14c-.38 0-.63-.39-.47-.73l4.63-8.38c.18-.32.51-.51.87-.51h.02c.36 0 .69.19.87.51l4.63 8.38c.16.34-.09.73-.47.73h-1.62zm-6.62.92c4.46 3.29 10.97 3.29 15.43 0 .27-.2.65-.13.82.16l.54.72c.16.22.12.53-.1.71-5.28 4.02-12.67 4.02-17.95 0-.22-.18-.26-.49-.1-.71l.54-.72c.17-.29.55-.36.82-.16z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">AWS Systems</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Distributed Storage</div>
+                    </div>
+
+                    <!-- NVIDIA AI Card -->
+                    <div class="company-card domain-cloud domain-ai p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-8 h-8" fill="#76B900" viewBox="0 0 24 24">
+                                <path d="M12.012 2C6.48 2 2 6.48 2 12.012s4.48 10.012 10.012 10.012 10.012-4.48 10.012-10.012S17.544 2 12.012 2zm3.84 14.18a5.15 5.15 0 0 1-3.69 1.48 5.17 5.17 0 0 1-5.17-5.17c0-2.85 2.32-5.17 5.17-5.17 1.42 0 2.73.58 3.69 1.51l-1.39 1.39a3.2 3.2 0 0 0-2.3-.93 3.2 3.2 0 0 0-3.2 3.2 3.2 3.2 0 0 0 3.2 3.2 3.18 3.18 0 0 0 2.3-.93l1.39 1.42z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">NVIDIA AI</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">CUDA & GPU Infra</div>
+                    </div>
+
+                    <!-- Anthropic Card -->
+                    <div class="company-card domain-ai p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M13.827 3.516h3.633L24 20.484h-3.766l-1.527-3.586H11.29l-1.527 3.586H6L13.827 3.516zm3.504 10.375l-2.438-5.727-2.438 5.727h4.876zM0 20.484l5.352-12.57h3.633L3.633 20.484H0z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Anthropic</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">LLM Safety & Alignment</div>
+                    </div>
+
+                    <!-- Palantir Card -->
+                    <div class="company-card domain-fde p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="shield" class="w-7 h-7 text-slate-900"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Palantir</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">FDE Engineering</div>
+                    </div>
+
+                    <!-- Meta Platforms Card -->
+                    <div class="company-card domain-ai domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-7 h-7" fill="#0668E1" viewBox="0 0 24 24">
+                                <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm3.623 12.87c-1.12 0-2.05-.62-2.73-1.58-.69.96-1.62 1.58-2.74 1.58-2.02 0-3.41-1.62-3.41-3.87 0-2.25 1.39-3.87 3.41-3.87 1.12 0 2.05.62 2.74 1.58.68-.96 1.61-1.58 2.73-1.58 2.02 0 3.41 1.62 3.41 3.87 0 2.25-1.39 3.87-3.41 3.87z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Meta AI</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Llama Systems</div>
+                    </div>
+
+                    <!-- Apple Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <svg class="w-7 h-7 text-slate-900" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.3c.63-.78 1.07-1.85.95-2.93-.93.04-2.06.63-2.72 1.41-.59.68-1.11 1.78-.97 2.84 1.05.08 2.11-.54 2.74-1.32z"/>
+                            </svg>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Apple Systems</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Silicon OS</div>
+                    </div>
+
+                    <!-- Databricks Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="layers" class="w-7 h-7 text-red-600"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Databricks</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Large Scale Data</div>
+                    </div>
+
+                    <!-- Snowflake Card -->
+                    <div class="company-card domain-fde p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="snowflake" class="w-7 h-7 text-sky-400"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Snowflake</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Data Warehousing</div>
+                    </div>
+
+                    <!-- Pinecone Card -->
+                    <div class="company-card domain-ai p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="box" class="w-7 h-7 text-emerald-600"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Pinecone</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Vector Databases</div>
+                    </div>
+
+                    <!-- Cloudflare Card -->
+                    <div class="company-card domain-cloud p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="cloud-lightning" class="w-7 h-7 text-amber-500"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">Cloudflare</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Edge Computing</div>
+                    </div>
+
+                    <!-- HashiCorp Card -->
+                    <div class="company-card domain-fde p-5 rounded-2xl bg-white border border-slate-200 text-center hover:border-brand-blue hover:shadow-md transition-all flex flex-col items-center justify-center">
+                        <div class="w-10 h-10 mb-2 flex items-center justify-center">
+                            <i data-lucide="cpu" class="w-7 h-7 text-purple-600"></i>
+                        </div>
+                        <div class="font-extrabold text-slate-900 text-sm">HashiCorp</div>
+                        <div class="text-[10px] text-slate-500 font-mono mt-0.5">Terraform & Vault</div>
+                    </div>
+
+                </div>
+
+                <div class="mt-8 text-center pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 font-mono gap-2">
+                    <span>+ 35 Additional Deep Tech & Global SaaS Enterprise Partners</span>
+                    <span class="text-brand-blue font-bold">2,000+ Active Placement Connects</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Vice Chancellor Executive Call to Action -->
+    <section id="vc-briefing" class="py-24 bg-white relative">
+        <div class="max-w-5xl mx-auto px-6 lg:px-8 reveal">
+            <div class="bg-slate-900 rounded-3xl p-10 md:p-16 border border-slate-800 text-center relative overflow-hidden shadow-2xl text-white">
+                
+                <span class="text-xs font-bold text-sky-400 uppercase tracking-widest mb-4 block">Executive Institutional Partnership</span>
+                
+                <h2 class="text-3xl sm:text-5xl font-extrabold tracking-tight mb-6">
+                    Schedule a Vice-Chancellor & Executive Briefing.
+                </h2>
+                
+                <p class="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 font-light leading-relaxed">
+                    Elevate your university into India’s leading deep-tech engineering sandbox with <span class="text-white font-semibold">Zero Upfront CapEx</span>. We handle Admissions, 4-Year On-Campus Pedagogy Delivery, and Tier-1 Placements.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto mb-10 text-left">
+                    <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                        <span class="text-xs text-slate-200 font-semibold">Uses Existing Campus Computer Labs</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                        <span class="text-xs text-slate-200 font-semibold">10+ Yrs Practitioner Faculty On-Campus</span>
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-800/80 border border-slate-700 flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400 shrink-0"></i>
+                        <span class="text-xs text-slate-200 font-semibold">Annual University Royalty Stream</span>
+                    </div>
+                </div>
+
+                <a href="mailto:corporate@devigram.com?subject=Vice-Chancellor%20Executive%20Briefing%20Request%20-%20DeviGram%20Academy" class="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-slate-950 font-extrabold text-sm uppercase tracking-wider hover:bg-sky-400 hover:text-slate-950 transition-all shadow-lg gap-2">
+                    Request VC & Executive Briefing
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white border-t border-slate-800 pt-16 pb-12 relative z-10 text-xs">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-slate-900 border border-slate-700 flex items-center justify-center text-sky-400 font-bold">
+                            <i data-lucide="cpu" class="w-4 h-4"></i>
+                        </div>
+                        <span class="font-bold text-base text-white">DeviGram Academy Private Limited</span>
+                    </div>
+                    <p class="text-slate-400 max-w-md leading-relaxed mb-6">
+                        Re-engineering higher technical education across India through Systems-First Active Pedagogy, 10+ year practitioner trainers, and Turnkey University Operating Models.
+                    </p>
+                    <a href="#google-cloud-partner" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 font-mono text-[11px] hover:border-sky-400 transition-colors">
+                        <i data-lucide="cloud" class="w-4 h-4 text-sky-400"></i>
+                        Official Google Cloud Partner (Workspace • Co-sell & Services)
+                    </a>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-[11px]">Academic OS</h4>
+                    <ul class="space-y-2 text-slate-400">
+                        <li><a href="#google-cloud-partner" class="hover:text-sky-400">Google Cloud Partnership</a></li>
+                        <li><a href="#simulator" class="hover:text-sky-400">Interactive Terminal</a></li>
+                        <li><a href="#whitepaper" class="hover:text-sky-400">Research Whitepaper v2.4</a></li>
+                        <li><a href="#faculty" class="hover:text-sky-400">10+ Yrs Practitioner Trainers</a></li>
+                        <li><a href="#placements" class="hover:text-sky-400">2K+ Hiring Network</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-[11px]">Corporate Offices</h4>
+                    <p class="text-slate-400 leading-relaxed mb-3">
+                        DeviGram Academy Pvt. Ltd.<br/>
+                        Surat, Gujarat & Greater Noida, Uttar Pradesh<br/>
+                        India
+                    </p>
+                    <p class="text-slate-300 font-mono">
+                        <i data-lucide="mail" class="w-3.5 h-3.5 inline mr-1 text-sky-400"></i>
+                        corporate@devigram.com
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between text-slate-500 gap-4">
+                <p>&copy; 2026 DeviGram Academy Private Limited. All rights reserved.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-slate-400">Privacy Policy</a>
+                    <a href="#" class="hover:text-slate-400">Terms of Governance</a>
+                    <a href="#" class="hover:text-slate-400">Institutional Compliance</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts & Animations -->
+    <script>
+        lucide.createIcons();
+
+        // Intersection Observer for Smooth Scroll Reveal Effect
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counters = entry.target.querySelectorAll('.counter');
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        let count = 0;
+                        const speed = target / 40;
+                        const updateCount = () => {
+                            count += speed;
+                            if (count < target) {
+                                counter.innerText = Math.ceil(count);
+                                setTimeout(updateCount, 30);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCount();
+                    });
+                    counterObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.grid').forEach(grid => counterObserver.observe(grid));
+
+        const canvas = document.getElementById('hero-canvas');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resizeCanvas() {
+                width = canvas.width = canvas.offsetWidth;
+                height = canvas.height = canvas.offsetHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            for (let i = 0; i < 35; i++) {
+                particles.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    vx: (Math.random() - 0.5) * 0.4,
+                    vy: (Math.random() - 0.5) * 0.4,
+                    radius: Math.random() * 2 + 1
+                });
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(2, 132, 199, 0.25)';
+                ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+
+                for (let i = 0; i < particles.length; i++) {
+                    let p = particles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+
+                    if (p.x < 0 || p.x > width) p.vx *= -1;
+                    if (p.y < 0 || p.y > height) p.vy *= -1;
+
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    for (let j = i + 1; j < particles.length; j++) {
+                        let p2 = particles[j];
+                        let dist = Math.hypot(p.x - p2.x, p.y - p2.y);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+                requestAnimationFrame(drawParticles);
+            }
+            drawParticles();
+        }
+
+        function runScenario(type) {
+            const logBox = document.getElementById('terminal-logs');
+            const rpsEl = document.getElementById('sim-rps');
+            const algoEl = document.getElementById('sim-algo');
+            const memEl = document.getElementById('sim-mem');
+
+            if (type === 'stress') {
+                rpsEl.innerText = '100,000 RPS';
+                algoEl.innerText = 'O(N²) DEGRADED';
+                memEl.innerText = '96% CRITICAL';
+                
+                logBox.innerHTML += `<p class="text-red-400">[CRITICAL WARNING] Synthetic traffic spiked to 100K RPS!</p>`;
+                logBox.innerHTML += `<p class="text-amber-300">[SANDBOX DIAGNOSTIC] Queue degradation detected in array worker allocation. CPU throttling triggered.</p>`;
+            } else if (type === 'refactor') {
+                rpsEl.innerText = '100,000 RPS (HANDLED)';
+                algoEl.innerText = 'O(N) Binary Heap';
+                memEl.innerText = '18% Optimal';
+                
+                logBox.innerHTML += `<p class="text-emerald-400">[SUCCESS] Queue refactored to Heap-Allocated Binary Tree.</p>`;
+                logBox.innerHTML += `<p class="text-sky-300">[SYSTEM STABLE] Latency stabilized to <2.4ms under 100K RPS. Memory leak resolved.</p>`;
+            }
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function clearTerminal() {
+            document.getElementById('terminal-logs').innerHTML = `<p class="text-slate-500">[SYSTEM INIT] Logs cleared. Active Pedagogy Engine ready.</p>`;
+        }
+
+        function filterDomain(domain) {
+            const cards = document.querySelectorAll('.company-card');
+            const tabs = document.querySelectorAll('.domain-tab');
+
+            tabs.forEach(tab => {
+                tab.classList.remove('bg-slate-900', 'text-white');
+                tab.classList.add('bg-slate-100', 'text-slate-700');
+            });
+            event.target.classList.remove('bg-slate-100', 'text-slate-700');
+            event.target.classList.add('bg-slate-900', 'text-white');
+
+            cards.forEach(card => {
+                if (domain === 'all' || card.classList.contains('domain-' + domain)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
